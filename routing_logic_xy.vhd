@@ -14,7 +14,7 @@
 --
 -- Revision: v 0.1
 -- Additional Comments:
---		Estrae dal messaggio in ingresso l'indirizzo del destinatario ed effettua un semplice routing XY.
+--		Estrae dal messaggio in ingresso l'indirizzo del destinatario ed effettua un semplice routing DOR YX.
 --		Eseguito il routing comanda la Crossbar in modo da mettere in comunicazione la Input Fifo in ingresso
 --		con il buffer in uscita opportuno.
 ----------------------------------------------------------------------------------
@@ -47,8 +47,8 @@ architecture RTL of routing_logic_xy is
 	constant X_source : std_logic_vector(ADDRESS_LENGTH-1 downto 0) := conv_std_logic_vector(LOCAL_X, ADDRESS_LENGTH);
 	constant Y_source : std_logic_vector(ADDRESS_LENGTH-1 downto 0) := conv_std_logic_vector(LOCAL_Y, ADDRESS_LENGTH);
 	
-	alias X_dest : std_logic_vector(ADDRESS_LENGTH-1 downto 0) is Data_In(DATA_WIDTH-1 downto DATA_WIDTH-ADDRESS_LENGTH);
-	alias Y_dest : std_logic_vector(ADDRESS_LENGTH-1 downto 0) is Data_In(DATA_WIDTH-ADDRESS_LENGTH-1 downto DATA_WIDTH-2*ADDRESS_LENGTH);
+	alias Y_dest : std_logic_vector(ADDRESS_LENGTH-1 downto 0) is Data_In(DATA_WIDTH-1 downto DATA_WIDTH-ADDRESS_LENGTH);
+	alias X_dest : std_logic_vector(ADDRESS_LENGTH-1 downto 0) is Data_In(DATA_WIDTH-ADDRESS_LENGTH-1 downto DATA_WIDTH-2*ADDRESS_LENGTH);
 	
 	signal sel_temp : crossbar_sel_type := (others => (others => '0'));
 
@@ -58,21 +58,21 @@ begin
 	
 	routing_mesh : process(Data_In, In_Channel) 
 		begin
-			if X_dest > X_source then
-				sel_temp(SOUTH_ID) <= In_Channel;  -- South
+			if Y_dest > Y_source then
+				sel_temp(SOUTH_ID) <= In_Channel;  
 				Out_Channel <= CONV_STD_LOGIC_VECTOR(SOUTH_ID, SEL_WIDTH);
-			elsif X_dest < X_source then
-				sel_temp(NORTH_ID) <= In_Channel;  -- North
+			elsif Y_dest < Y_source then
+				sel_temp(NORTH_ID) <= In_Channel; 
 				Out_Channel <= CONV_STD_LOGIC_VECTOR(NORTH_ID, SEL_WIDTH);
 			else
-				if Y_dest > Y_source then
-					sel_temp(EAST_ID) <= In_Channel; -- East
+				if X_dest > X_source then
+					sel_temp(EAST_ID) <= In_Channel;
 					Out_Channel <= CONV_STD_LOGIC_VECTOR(EAST_ID, SEL_WIDTH);
-				elsif Y_dest < Y_source then
-					sel_temp(WEST_ID) <= In_Channel; -- West
+				elsif X_dest < X_source then
+					sel_temp(WEST_ID) <= In_Channel; 
 					Out_Channel <= CONV_STD_LOGIC_VECTOR(WEST_ID, SEL_WIDTH);
 				else
-					sel_temp(LOCAL_ID) <= In_Channel; -- Local
+					sel_temp(LOCAL_ID) <= In_Channel; 
 					Out_Channel <= CONV_STD_LOGIC_VECTOR(LOCAL_ID, SEL_WIDTH);
 				end if;
 			end if;
