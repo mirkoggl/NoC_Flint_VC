@@ -92,10 +92,10 @@ architecture RTL of router_control_unit is
 	END COMPONENT;
 	
 	constant ONE_VECT : std_logic_vector(CHAN_NUMBER - 1 downto 0) := (others => '1');
-	type state_type is (idle, out_wren, out_delay); 
+	type state_type is (out_wren, out_delay); 
 	
 	-- Control Unit Signals
-	signal current_s : state_type := idle;
+	signal current_s : state_type := out_wren;
 	signal n_empty_in  : std_logic_vector(CHAN_NUMBER - 1 downto 0) := (others => '0');
 	signal rr_counter  : std_logic_vector(SEL_WIDTH - 1 downto 0) := (others => '0');
 	signal rr_index    : std_logic_vector(SEL_WIDTH - 1 downto 0)  := (others => '0');
@@ -134,10 +134,13 @@ begin
 			Crossbar_Sel => Cross_Sel
 		);
 	
+	xy_data_in <= Data_II(CONV_INTEGER(rr_index)) when Empty_II /= ONE_VECT; 
+	xy_chan_in <= rr_index when Empty_II /= ONE_VECT; 	
+	
 	CU_process : process (clk, reset)
 	begin
 		if reset = '1' then
-			current_s <= idle;
+			current_s <= out_wren;
 			Wr_En_OI <= (others => '0');
 			Shft_II <= (others => '0');
 			rr_counter <= (others => '0');
@@ -154,27 +157,20 @@ begin
 			end if;
 					
 			case current_s is
-				
-		     when idle =>	
-		     	if Empty_II = ONE_VECT then	-- Selettore Round Robin
-			    	current_s <= idle;
-			    else
-			    	xy_data_in <= Data_II(CONV_INTEGER(rr_index)); 
-			    	xy_chan_in <= rr_index;
-			    	current_s <= out_wren;
-		     	end if;       
-			    			
-			when out_wren =>	
+
+			when out_wren =>
+			 if Empty_II /= ONE_VECT then	
 				if Full_OI(CONV_INTEGER(xy_chan_out)) = '1' then  -- FIFO Out full, scarta il pacchetto e torna idle
-					current_s <= idle;
+					current_s <= out_wren;
 				else
 					current_s <= out_delay;
 					Wr_En_OI(CONV_INTEGER(xy_chan_out)) <= '1';
 					Shft_II(CONV_INTEGER(xy_chan_in)) <= '1';
 				end if;
+			 end if;
 			
 			when out_delay => 	-- Stato usato per generare impulsi di write ed evitare di scrivere nel buffer di uscita più volte lo stesso dato
-				current_s <= idle;
+				current_s <= out_wren;
 						    
 			end case;
 		
