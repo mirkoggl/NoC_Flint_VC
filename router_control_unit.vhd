@@ -84,12 +84,20 @@ architecture RTL of router_control_unit is
 	END COMPONENT routing_logic_xy;
 	
 	COMPONENT rr_arbiter
-		Port(
+		Port (
 			Counter_In : in std_logic_vector(SEL_WIDTH - 1 downto 0);
-			Valid_In   : in  std_logic_vector(CHAN_NUMBER - 1 downto 0);
+			Valid_In   : in std_logic_vector(CHAN_NUMBER - 1 downto 0);
+			Win_OneHot : out std_logic_vector(CHAN_NUMBER - 1 downto 0);
 			Win_Out    : out std_logic_vector(SEL_WIDTH - 1 downto 0)
 		);
 	END COMPONENT;
+	
+	COMPONENT onehot_encoder
+		Port(
+			vect_in  : in  std_logic_vector(SEL_WIDTH - 1 downto 0);
+			vect_out : out std_logic_vector(CHAN_NUMBER - 1 downto 0)
+		);
+	end component onehot_encoder;
 	
 	constant ONE_VECT : std_logic_vector(CHAN_NUMBER - 1 downto 0) := (others => '1');
 	type state_type is (out_wren, out_delay); 
@@ -103,24 +111,31 @@ architecture RTL of router_control_unit is
 	signal xy_chan_in  : std_logic_vector(SEL_WIDTH - 1 downto 0) := (others => '0');
 	signal xy_chan_out : std_logic_vector(SEL_WIDTH - 1 downto 0) := (others => '0');
 	
+	signal fifo_input  : std_logic_vector(CHAN_NUMBER - 1 downto 0) := (others => '0');
+	signal fifo_output : std_logic_vector(CHAN_NUMBER - 1 downto 0) := (others => '0');
+	
 begin
 
   -----------------------------------------------------------------------
-  -- Round Robin Arbiter
+  -- Round Robin Selector
   -----------------------------------------------------------------------
-	
-	n_empty_in <= not Empty_II;
-	
+		
 	rr_arb_inst : rr_arbiter
 		Port Map(
 			Counter_In => rr_counter,
 			Valid_In => n_empty_in,
+			Win_OneHot => fifo_input,
 			Win_Out  => rr_index
 		);
+	
+	n_empty_in <= not Empty_II;
 
   -----------------------------------------------------------------------
   -- DOR Routing Logic
   -----------------------------------------------------------------------
+  	
+  	xy_data_in <= Data_II(CONV_INTEGER(rr_index)) when Empty_II /= ONE_VECT; 
+	xy_chan_in <= rr_index when Empty_II /= ONE_VECT; 	
   	
 	XY_logic : routing_logic_xy
 		Generic Map(
@@ -133,22 +148,33 @@ begin
 			Out_Channel  => xy_chan_out,
 			Crossbar_Sel => Cross_Sel
 		);
+		
+--	onehot_enc : onehot_encoder
+--		Port Map(
+--			vect_in  => xy_chan_out,
+--			vect_out => fifo_output
+--		);
 	
-	xy_data_in <= Data_II(CONV_INTEGER(rr_index)) when Empty_II /= ONE_VECT; 
-	xy_chan_in <= rr_index when Empty_II /= ONE_VECT; 	
+--	Wr_En_OI <= fifo_output when Empty_II /= ONE_VECT else (others => '0');
+--  Shft_II <= fifo_input when Empty_II /= ONE_VECT else (others => '0');
 	
+	
+  -----------------------------------------------------------------------
+  -- Control Unit
+  -----------------------------------------------------------------------	
+  
 	CU_process : process (clk, reset)
 	begin
 		if reset = '1' then
 			current_s <= out_wren;
-			Wr_En_OI <= (others => '0');
 			Shft_II <= (others => '0');
+			Wr_En_OI <= (others => '0');
 			rr_counter <= (others => '0');
 		
 		elsif rising_edge(clk) then		
 			
 			Shft_II <= (others => '0');
-			Wr_En_OI <= (others => '0');
+			Wr_En_OI <= (others => '0');			
 			
 			if rr_counter = CONV_STD_LOGIC_VECTOR(CHAN_NUMBER-1, SEL_WIDTH) then
 				rr_counter <= (others => '0');
@@ -170,8 +196,7 @@ begin
 			 end if;
 			
 			when out_delay => 	-- Stato usato per generare impulsi di write ed evitare di scrivere nel buffer di uscita più volte lo stesso dato
-				current_s <= out_wren;
-						    
+				current_s <= out_wren;	    
 			end case;
 		
 		end if;
