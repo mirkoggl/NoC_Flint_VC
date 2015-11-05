@@ -92,8 +92,7 @@ begin
 	
 	Full_Out  <= fifo_full;
 	Data_Out  <= fifo_memory(conv_integer(head_pt));
-	Valid_Out <= '0' when head_pt = tail_pt		
-						else '1'; 
+	Valid_Out <= not fifo_empty;
 	
 
 	Output_Interface_Control_Unit : process (clk, reset)
