@@ -12,27 +12,29 @@
 --
 -- Dependencies: 	 
 --
--- Revision: v 0.3
+-- Revision: v 0.4
 -- Additional Comments:
---		Network Output Interface gestisce i dati in uscita dal Router su un dato canale. Ogni dato è bufferizzato in una Fifo circolare. 
---		Quando la Fifo non è vuota tenta di inviare il dato in testa all'Input Interface Network del Router con cui è collegato. L'invio del
---		dato e l'attesa dell'ack sono gestiti con una FSM a due stati.
+--		Network Output Interface gestisce i dati in uscita dal Router su un dato canale. Ogni dato è bufferizzato in una FIFO circolare. 
+--		Quando la FIFO non è vuota tenta di inviare il dato in testa all'Input Interface Network del Router con cui è collegato. L'invio del
+--		avviene se l'Input interface del vicino è pronta a ricevere. Se il segnale di ready dal vicino è alto e la propria FIFO non è vuota, 
+--		l'Output Interface asserisce valid ed incrementa la testa della FIFO. 
 --
 --			Output Interface				Input Interface
 --			________________				__________________
 --				       valid|-------------->|valid
 --					Data_Out|-------------->|Data_In
---						ack	|<--------------|ack
+--					  ready	|<--------------|ready
 --							|				|
 --											
---		Quando il dato è pronto l'unità di controllo asserisce valid e si pone in attesa dell'ack da parte del Router ricevente. La
---		FSM resterà in attesa dell'ack per un numero di cicli pari a quelli indicati nella verabiale COUNTER_WIDTH nel routerpack.
+--		Network Output Interface riceve i dati da inviare dalla Crossbar che collega tutti i FIFO Input Interface del router a tutti
+--		i FIFO Output Interface. Quando il dato in ingresso è valido, la Control Unit asserisce wren. Se la FIFO non è piena, il dato
+--		in ingresso è aggiunto in coda e sdone è asserito ad indicare che il salvataggio è stato effettuato correttamente. Se la Fifo è piena
+--		full è alto e la Control Unit agirà di conseguenza.
 --
 --
 --		    Output Interface				Control Unit
 --			________________				_________________	
 --					    wren|<--------------|wren
---					   sdone|-------------->|sdone
 --						full|-------------->|full
 --							|				|________________							
 --							|					
@@ -40,11 +42,6 @@
 --							|				_________________
 --					 Data_In|<--------------|Data_Out
 --							|				|
---
---		Network Output Interface riceve i dati da inviare dalla Crossbar che collega tutti gli Network Input Interface del router a tutti
---		gli Network Output Interface. Quando il dato in ingresso è valido, la Control Unit asserisce wren. Se la FIFO non è piena, il dato
---		in ingresso è aggiunto in coda e sdone è asserito ad indicare che il salvataggio è stato effettuato correttamente. Se la Fifo è piena
---		full è alto e la Control Unit agirà di conseguenza.
 --
 ----------------------------------------------------------------------------------
 
@@ -67,14 +64,13 @@ entity net_output_interface is
 		clk : in std_logic;
 		reset : in std_logic;
 		
-		Data_In  : in std_logic_vector(DATA_WIDTH - 1 downto 0);   -- Data Input
-		Full_In  : in std_logic;								   -- Full signal from connected Router Input interface	
-		Ready_In : in std_logic; 								   -- Ready signal from connected Router Input interface	
-		WrEn_In  : in std_logic;								   -- Write Enable
+		Data_In  : in std_logic_vector(DATA_WIDTH - 1 downto 0);   -- Data Input, from control unit
+		Ready_In : in std_logic; 								   -- Ready signal, from neighbor Router Input interface	
+		WrEn_In  : in std_logic;								   -- Write Enable, from control unit
 		
-		Full_Out  : out std_logic;								   -- Fifo Full
-		Valid_Out : out std_logic;								   -- Data Output valid to connected Router Input interface
-		Data_Out  : out std_logic_vector(DATA_WIDTH - 1 downto 0)  -- Data Output
+		Full_Out  : out std_logic;								   -- Fifo Full, to the control unit
+		Valid_Out : out std_logic;								   -- Data Output valid, to neighbor Router Input interface
+		Data_Out  : out std_logic_vector(DATA_WIDTH - 1 downto 0)  -- Data Output, to neighbor Router Input interface
 	);
 end entity net_output_interface;
 
@@ -114,7 +110,7 @@ begin
 			   tail_pt <= tail_pt + '1';
 		  end if;
 			   
-		  if fifo_empty = '0' and Full_In = '0' and Ready_In = '1' then	-- Send Fifo first element
+		  if fifo_empty = '0' and Ready_In = '1' then	-- Send Fifo first element
 			   head_pt <= head_pt + '1';
 		  end if;
 			    

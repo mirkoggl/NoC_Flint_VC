@@ -1,3 +1,44 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Author: 	Mirko Gagliardi
+-- 
+-- Create Date:    01/10/2015
+-- Design Name: 
+-- Module Name:    Control Unit - rtl 
+-- Project Name:   Router_Mesh	
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 	 
+--
+-- Revision: v 0.2
+-- Additional Comments:
+--		La Control Unit uno sceglie tra i FIFO Input Interface il cui empty è basso (ad indicare che hanno almeno un 
+--		elemento nella coda). La scelta è effettuata mediante un arbitro RR (componente rr_arbiter), il vincitore è 
+--		schedulato per l'invio. 
+--		La CU controlla la destinazione del pacchetto in testa alla coda del vincitore. Il componente routing_logic_xy
+--		controlla la destinazione del pacchetto (usa il DOR) e calcola su quale interfaccia di uscita deve essere smistato.
+--		Tale componente restituisce anche il segnale di selezione da passare alla crossbar per collegare la FIFO input 
+--      interface e la FIFO output interface interessati. 
+--		La CU asserisce il write enable della FIFO output interessata in modo da predisporla alla ricezione del dato.
+--		Se l'interfaccia di uscita ha la coda piena, il pacchetto viene perso.
+--		
+--		Input Interface	             Control Unit   		              Output Interface
+--		_______________	       ______________________                __________________
+--			  Data_Out|------->|Data_II       Full_OI|<--------------|full
+--				 empty|------->|Empty_II     Wr_En_OI|-------------->|wren
+--				  shft|<-------|Shft_II         ready|<--------------|ready
+--					  |  	   |                     |               |
+--													 |
+--													 |
+--		                          					 |   		Crossbar
+--													 |		_________________	
+--											Cross_Sel|----->|cross_sel
+--													 |		|									
+--	
+----------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -16,13 +57,14 @@ entity router_control_unit is
 	Port (
 		clk   : in std_logic;
 		reset : in std_logic;
-		Data_In  : in data_array_type;
-		Empty_In : in std_logic_vector(CHAN_NUMBER-1 downto 0);
-		Full_Out : in std_logic_vector(CHAN_NUMBER-1 downto 0);
 		
-		Shft_In   : out std_logic_vector(CHAN_NUMBER-1 downto 0);
-		Wr_En_Out : out std_logic_vector(CHAN_NUMBER-1 downto 0);
-		Cross_Sel : out crossbar_sel_type	
+		Data_II  : in data_array_type;							  -- Data input from all the Input Interfaces
+		Empty_II : in std_logic_vector(CHAN_NUMBER-1 downto 0);	  -- Empty FIFO control signal from all the Input Interfaces
+		Full_OI  : in std_logic_vector(CHAN_NUMBER-1 downto 0);   -- Full FIFO control signal from all the Output Interfaces
+		
+		Shft_II   : out std_logic_vector(CHAN_NUMBER-1 downto 0); -- Shift enable signal to Input Interfaces
+		Wr_En_OI  : out std_logic_vector(CHAN_NUMBER-1 downto 0); -- Write enable signal to Output Interfaces
+		Cross_Sel : out crossbar_sel_type						  -- Crossbar sel control signal	
 	);
 end entity router_control_unit;
 
@@ -62,7 +104,24 @@ architecture RTL of router_control_unit is
 	signal xy_chan_out : std_logic_vector(SEL_WIDTH - 1 downto 0) := (others => '0');
 	
 begin
+
+  -----------------------------------------------------------------------
+  -- Round Robin Arbiter
+  -----------------------------------------------------------------------
 	
+	n_empty_in <= not Empty_II;
+	
+	rr_arb_inst : rr_arbiter
+		Port Map(
+			Counter_In => rr_counter,
+			Valid_In => n_empty_in,
+			Win_Out  => rr_index
+		);
+
+  -----------------------------------------------------------------------
+  -- DOR Routing Logic
+  -----------------------------------------------------------------------
+  	
 	XY_logic : routing_logic_xy
 		Generic Map(
 			LOCAL_X    => LOCAL_X,
@@ -75,27 +134,18 @@ begin
 			Crossbar_Sel => Cross_Sel
 		);
 	
-	n_empty_in <= not(Empty_In);
-	
-	rr_arb_inst : rr_arbiter
-		Port Map(
-			Counter_In => rr_counter,
-			Valid_In => n_empty_in,
-			Win_Out  => rr_index
-		);
-	
 	CU_process : process (clk, reset)
 	begin
 		if reset = '1' then
 			current_s <= idle;
-			Wr_En_Out <= (others => '0');
-			Shft_In <= (others => '0');
+			Wr_En_OI <= (others => '0');
+			Shft_II <= (others => '0');
 			rr_counter <= (others => '0');
 		
 		elsif rising_edge(clk) then		
 			
-			Shft_In <= (others => '0');
-			Wr_En_Out <= (others => '0');
+			Shft_II <= (others => '0');
+			Wr_En_OI <= (others => '0');
 			
 			if rr_counter = CONV_STD_LOGIC_VECTOR(CHAN_NUMBER-1, SEL_WIDTH) then
 				rr_counter <= (others => '0');
@@ -106,21 +156,21 @@ begin
 			case current_s is
 				
 		     when idle =>	
-		     	if Empty_In = ONE_VECT then	-- Selettore Round Robin
+		     	if Empty_II = ONE_VECT then	-- Selettore Round Robin
 			    	current_s <= idle;
 			    else
-			    	xy_data_in <= Data_In(CONV_INTEGER(rr_index)); 
+			    	xy_data_in <= Data_II(CONV_INTEGER(rr_index)); 
 			    	xy_chan_in <= rr_index;
 			    	current_s <= out_wren;
 		     	end if;       
 			    			
 			when out_wren =>	
-				if Full_Out(CONV_INTEGER(xy_chan_out)) = '1' then  -- Fifo Out full, scarta il pacchetto e torna idle
+				if Full_OI(CONV_INTEGER(xy_chan_out)) = '1' then  -- FIFO Out full, scarta il pacchetto e torna idle
 					current_s <= idle;
 				else
 					current_s <= out_delay;
-					Wr_En_Out(CONV_INTEGER(xy_chan_out)) <= '1';
-					Shft_In(CONV_INTEGER(xy_chan_in)) <= '1';
+					Wr_En_OI(CONV_INTEGER(xy_chan_out)) <= '1';
+					Shft_II(CONV_INTEGER(xy_chan_in)) <= '1';
 				end if;
 			
 			when out_delay => 	-- Stato usato per generare impulsi di write ed evitare di scrivere nel buffer di uscita più volte lo stesso dato

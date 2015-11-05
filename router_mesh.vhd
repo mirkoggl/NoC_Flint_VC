@@ -20,11 +20,9 @@ entity router_mesh is
 		Data_In   : in data_array_type;
 		Ready_Out : out std_logic_vector(CHAN_NUMBER-1 downto 0);
 		Valid_In  : in std_logic_vector(CHAN_NUMBER-1 downto 0);
-		Full_Out  : out std_logic_vector(CHAN_NUMBER-1 downto 0);
 		
 		Data_Out  : out data_array_type;
 		Valid_Out : out std_logic_vector(CHAN_NUMBER-1 downto 0);
-		Full_In   : in std_logic_vector(CHAN_NUMBER-1 downto 0);
 		Ready_In  : in std_logic_vector(CHAN_NUMBER-1 downto 0)
 	);
 end entity router_mesh;
@@ -40,7 +38,6 @@ architecture RTL of router_mesh is
     		clk       : in  std_logic;
     		reset     : in  std_logic;
     		Data_In   : in  std_logic_vector(DATA_WIDTH - 1 downto 0);
-    		Full_In   : in  std_logic;
     		Ready_In  : in  std_logic;
     		WrEn_In   : in  std_logic;
     		Full_Out  : out std_logic;
@@ -61,7 +58,6 @@ architecture RTL of router_mesh is
 	 		Valid_In  : in  std_logic;
 	 		Shft_In   : in  std_logic;
 		    Empty_Out  : out std_logic;
-	 		Full_Out  : out std_logic;
 	 		Ready_Out : out std_logic;
 	 		Data_Out  : out std_logic_vector(DATA_WIDTH - 1 downto 0)
 	 	);
@@ -83,11 +79,11 @@ architecture RTL of router_mesh is
 		Port(
 			clk       : in  std_logic;
 			reset     : in  std_logic;
-			Data_In   : in  data_array_type;
-			Empty_In  : in  std_logic_vector(CHAN_NUMBER - 1 downto 0);
-			Full_Out  : in  std_logic_vector(CHAN_NUMBER - 1 downto 0);
-			Shft_In   : out std_logic_vector(CHAN_NUMBER - 1 downto 0);
-			Wr_En_Out : out std_logic_vector(CHAN_NUMBER - 1 downto 0);
+			Data_II   : in  data_array_type;
+			Empty_II  : in  std_logic_vector(CHAN_NUMBER - 1 downto 0);
+			Full_OI   : in  std_logic_vector(CHAN_NUMBER - 1 downto 0);
+			Shft_II   : out std_logic_vector(CHAN_NUMBER - 1 downto 0);
+			Wr_En_OI  : out std_logic_vector(CHAN_NUMBER - 1 downto 0);
 			Cross_Sel : out crossbar_sel_type
 		);
 	END COMPONENT;
@@ -123,7 +119,6 @@ begin
 				Valid_In  => Valid_In(i),
 				Shft_In   => ii_shft_vector(i),
 				Empty_Out => ii_empty_vector(i),
-				Full_Out  => Full_Out(i),
 				Ready_Out => Ready_Out(i),
 				Data_Out  => cb_data_in(i)
 			);
@@ -141,11 +136,11 @@ begin
 		Port Map(
 			clk       => clk,
 			reset     => reset,
-			Data_In   => cb_data_in,
-			Empty_In  => ii_empty_vector,
-			Full_Out  => oi_full_vector,
-			Shft_In   => ii_shft_vector,
-			Wr_En_Out => oi_wren_vector,
+			Data_II   => cb_data_in,
+			Empty_II  => ii_empty_vector,
+			Full_OI  => oi_full_vector,
+			Shft_II   => ii_shft_vector,
+			Wr_En_OI => oi_wren_vector,
 			Cross_Sel => cb_sel
 		);
 						 
@@ -174,7 +169,6 @@ begin
   				clk       => clk,
   				reset     => reset,
   				Data_In   => cb_data_out(i),
-  				Full_In   => Full_In(i),
   				Ready_In  => Ready_In(i),
   				WrEn_In   => oi_wren_vector(i),
   				Full_Out  => oi_full_vector(i),
