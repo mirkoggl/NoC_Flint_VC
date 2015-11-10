@@ -1,0 +1,100 @@
+# Reading C:/altera/15.0/modelsim_ase/tcl/vsim/pref.tcl
+# vsim -gui -modelsimini C:/Users/Mirko/AppData/Local/Temp/SigasiCompileCache9111481322865924780/NoC_Flint_VC/mentor/modelsim.ini work.tb_router(behavior) 
+# Start time: 20:51:58 on Nov 10,2015
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Loading work.logpack(body)
+# Loading work.routerpack(body)
+# Loading work.tb_router(behavior)
+# Loading work.router_mesh(rtl)
+# Loading work.net_input_interface(rtl)
+# Loading work.router_control_unit(rtl)
+# Loading work.rr_arbiter(rtl)
+# Loading work.onehot_converter(rtl)
+# Loading work.routing_logic_xy(rtl)
+# Loading work.crossbar(rtl)
+# Loading work.mux_n(rtl)
+# Loading work.net_output_interface(rtl)
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 104
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 105
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 106
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 107
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 108
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 109
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 110
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 111
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 112
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 113
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 114
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 115
+# ** Error: unknown option "wave"
+# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 116
+run
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(4)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(4)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(3)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(3)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(2)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(2)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(1)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(1)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/CU_inst
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/CU_inst
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/CU_inst
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/CU_inst
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 1  Instance: /tb_router/uut/CU_inst/XY_logic
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 1  Instance: /tb_router/uut/CU_inst/XY_logic
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 1  Instance: /tb_router/uut/CU_inst/XY_logic
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 1  Instance: /tb_router/uut/CU_inst/XY_logic
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 2  Instance: /tb_router/uut/CU_inst/rr_arb_inst
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 0 ps  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 105 ns  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 105 ns  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 125 ns  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
+#    Time: 125 ns  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
+# End time: 21:00:27 on Nov 10,2015, Elapsed time: 0:08:29
+# Errors: 39, Warnings: 25
