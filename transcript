@@ -1,6 +1,6 @@
 # Reading C:/altera/15.0/modelsim_ase/tcl/vsim/pref.tcl
-# vsim -gui -modelsimini C:/Users/Mirko/AppData/Local/Temp/SigasiCompileCache9111481322865924780/NoC_Flint_VC/mentor/modelsim.ini work.tb_router(behavior) 
-# Start time: 20:51:58 on Nov 10,2015
+# vsim -gui -modelsimini C:/Users/Mirko/AppData/Local/Temp/SigasiCompileCache1034644483503348766/NoC_Flint_VC/mentor/modelsim.ini work.tb_router(behavior) 
+# Start time: 00:06:14 on Nov 11,2015
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -19,32 +19,39 @@
 # Loading work.crossbar(rtl)
 # Loading work.mux_n(rtl)
 # Loading work.net_output_interface(rtl)
+# Trace back: Error QStructure::sort: invalid command name ""
+#   <6:proc:11: ::QStructure::sort .main_pane.structure 0 ascending
+#   <5:eval:1: ::QStructure::structsort .main_pane.structure 0 ascending
+#   <4:eval:1: ::namespace inscope ::QStructure {structsort .main_pane.structure} 0 ascending
+#   >3:proc:26: ::.main_pane.structure.interior.cs.body.struct sort 0 ascending
+#   >2:proc:10: ::.main_pane.structure.interior.cs.body.struct _initializeSortColumn
+#   <1:eval:1: ::namespace inscope ::vsimwidgets::Hierarchy {::.main_pane.structure.interior.cs.body.struct _initializeSortColumn}
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 104
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 104
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 105
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 105
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 106
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 106
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 107
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 107
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 108
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 108
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 109
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 109
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 110
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 110
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 111
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 111
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 112
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 112
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 113
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 113
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 114
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 114
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 115
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 115
 # ** Error: unknown option "wave"
-# Executing ONERROR command at macro C:\workspace_quartus\NoC\NoC_Flit_VC\simulation\modelsim\wave_router.do line 116
+# Executing ONERROR command at macro C:\Users\Mirko\workspaceSigasi\NoC_Flint_VC\wave_router.do line 116
 run
 # ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
 #    Time: 0 ps  Iteration: 0  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(4)/MuxX
@@ -96,5 +103,5 @@ run
 #    Time: 125 ns  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
 # ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
 #    Time: 125 ns  Iteration: 3  Instance: /tb_router/uut/Crossbar_inst/GEN_MUX(0)/MuxX
-# End time: 21:00:27 on Nov 10,2015, Elapsed time: 0:08:29
-# Errors: 39, Warnings: 25
+# End time: 00:08:57 on Nov 11,2015, Elapsed time: 0:02:43
+# Errors: 53, Warnings: 25
