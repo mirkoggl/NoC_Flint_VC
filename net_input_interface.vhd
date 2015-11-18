@@ -1,3 +1,10 @@
+-------------------------------------------------------
+--! @file
+--! @brief Network Input Interface
+--! @description Implementation of a Network Input Interface
+--! @author Mirko Gagliardi
+--! @date 2015-11-04
+-------------------------------------------------------
 ----------------------------------------------------------------------------------
 -- Company: 
 -- Author: 	Mirko Gagliardi
